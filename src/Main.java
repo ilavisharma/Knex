@@ -1,8 +1,6 @@
 import Knex.*;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,15 +11,24 @@ public class Main {
 
             Knex db= new Knex("mysql", client);
 
-//            values to change
-            HashMap<String, Object> hashMap= new HashMap<>();
-            hashMap.put("last_name", "Smoak");
+            Object[][] values= {
+                    {"Iris", "West"}, {"Oliver", "Queen"}, {"Gary", "Green"}, {"Rei", "Kovacs"}
+            };
+            String[] columns= {"first_name", "last_name"};
 
-            Query query= new Query("users").update(hashMap).where("first_name", "Felicity");
+            Query query1= new Query("users")
+                    .insert(columns, values);
 
-            int rowsAffected= db.executeUpdate(query);
+            Query query2= new Query("users")
+                    .update(new String[]{"first_name"}, new Object[]{"Laurel"})
+                    .where("last_name", "Lance");
 
-            System.out.println(rowsAffected+" rows affected");
+            System.out.println(query2.getRawSql());
+
+            int rowsAffected= db.executeUpdate(query1);
+            int rowsAffected2= db.executeUpdate(query2);
+
+            System.out.println(rowsAffected+"  "+rowsAffected2);
 
         } catch (ClassNotFoundException | SQLException | KnexException e) {
             e.printStackTrace();
