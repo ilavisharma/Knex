@@ -6,13 +6,11 @@ public class Knex {
     private String connectionString;
     private String driverClass;
     private Client client;
-    private Connection connection;
+    private Statement statement;
 
-//    "jdbc:mysql://localhost:3306/database"
-//    "jdbc:oracle:thin:@localhost:1521:xe"
-
-    public Knex(String type, Client client) {
+    public Knex(String type, Client client) throws SQLException, ClassNotFoundException, KnexException {
         this.client= client;
+        type= type.toLowerCase();
 
 //        Create the connection string
         if (type.equals("mysql")) {
@@ -21,28 +19,24 @@ public class Knex {
         } else if (type.equals("oracle")) {
             connectionString= "jdbc:oracle:thin:@"+client.host+":"+client.port+":xe";
             driverClass= "oracle.jdbc.Driver.OracleDriver";
+        } else {
+            throw new KnexException("The database ' "+ type + " ' is not supported");
         }
-
+        connect();
     }
 
     public void connect() throws ClassNotFoundException, SQLException {
         Class.forName(driverClass);
-
-        connection= DriverManager.getConnection(connectionString, client.user, client.password);
-
-        execute("SELECT * FROM users");
+        Connection connection= DriverManager.getConnection(connectionString, client.user, client.password);
+        statement= connection.createStatement();
     }
 
-    private void execute(String query) throws SQLException {
-
-        Statement statement= connection.createStatement();
-
-        ResultSet resultSet= statement.executeQuery(query);
-
-        while (resultSet.next()) {
-            System.out.println(resultSet.getInt(1)+" "+resultSet.getString(2)+" "+resultSet.getString(3));
-
-        }
-
+    public ResultSet rawQuery(String query) throws SQLException {
+        return statement.executeQuery(query);
     }
+
+    public ResultSet executeQuery(Query query) throws SQLException {
+        return statement.executeQuery(query.sql);
+    }
+
 }
