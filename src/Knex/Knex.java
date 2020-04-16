@@ -22,6 +22,7 @@ public class Knex {
         } else {
             throw new KnexException("The database ' "+ type + " ' is not supported");
         }
+//        connect to the DB
         connect();
     }
 
@@ -31,12 +32,20 @@ public class Knex {
         statement= connection.createStatement();
     }
 
-    public ResultSet rawQuery(String query) throws SQLException {
+    public ResultSet rawExecuteQuery(String query) throws SQLException {
         return statement.executeQuery(query);
     }
 
+    public int rawUpdateQuery(String query) throws SQLException {
+        return statement.executeUpdate(query);
+    }
+
     public ResultSet executeQuery(Query query) throws SQLException {
-        return statement.executeQuery(query.sql);
+            return statement.executeQuery(query.sql);
+    }
+
+    public int executeUpdate(Query query) throws SQLException {
+        return statement.executeUpdate(query.sql);
     }
 
 }
