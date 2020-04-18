@@ -1,5 +1,6 @@
 import Knex.*;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Main {
@@ -11,24 +12,12 @@ public class Main {
 
             Knex db= new Knex("mysql", client);
 
-            Object[][] values= {
-                    {"Iris", "West"}, {"Oliver", "Queen"}, {"Gary", "Green"}, {"Rei", "Kovacs"}
-            };
-            String[] columns= {"first_name", "last_name"};
+            Query q1= new Query("users")
+                    .select("*");
 
-            Query query1= new Query("users")
-                    .insert(columns, values);
+            db.print(db.executeQuery(q1));
 
-            Query query2= new Query("users")
-                    .update(new String[]{"first_name"}, new Object[]{"Laurel"})
-                    .where("last_name", "Lance");
-
-            System.out.println(query2.getRawSql());
-
-            int rowsAffected= db.executeUpdate(query1);
-            int rowsAffected2= db.executeUpdate(query2);
-
-            System.out.println(rowsAffected+"  "+rowsAffected2);
+            db.close();
 
         } catch (ClassNotFoundException | SQLException | KnexException e) {
             e.printStackTrace();

@@ -13,19 +13,14 @@ public class Query {
         for (String column : columns) {
             statement = statement.concat(column + ", ");
         }
-        sql= statement.concat(" FROM "+tableName).substring(0, statement.length()-2);
+        statement= removeLastComma(statement).concat(" FROM "+tableName);
+        sql= sql.concat(statement);
         return this;
     }
 
-    public Query where(String columnName, String value) {
-        String whereClause= " WHERE "+columnName+"="+"'"+value+"'";
-        sql= sql.concat(whereClause);
-        return this;
-    }
+    public Query where(String condition) {
 
-    public Query where(String columnName, Integer value) {
-        String whereClause= " WHERE "+columnName+"="+value;
-        sql= sql.concat(whereClause);
+        sql= sql.concat(" WHERE "+condition);
         return this;
     }
 
@@ -80,7 +75,33 @@ public class Query {
         return this;
     }
 
+    public Query delete() {
+        String deleteClause= "DELETE FROM "+tableName;
+        sql= sql.concat(deleteClause);
+        return this;
+    }
 
+    public Query orderByDesc(String column) {
+        String orderClause= " ORDER BY "+column+ " DESC";
+        sql= sql.concat(orderClause);
+        return this;
+    }
+
+    public Query orderByAsc(String column) {
+        String orderClause= " ORDER BY "+column+ " ASC";
+        sql= sql.concat(orderClause);
+        return this;
+    }
+
+    public Query groupBy(String column) throws KnexException {
+        if (sql.contains("ORDER BY"))
+            throw new KnexException("orderBy should come at last");
+        String groupClause= " GROUP BY "+column;
+        sql= sql.concat(groupClause);
+        return this;
+    }
+
+//    SOME HELPERS
     public String getRawSql() {
         return sql;
     }
