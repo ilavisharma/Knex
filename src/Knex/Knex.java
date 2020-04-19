@@ -49,26 +49,30 @@ public class Knex {
         return statement.executeUpdate(query.sql);
     }
 
-    public void print(int rows) {
+    public static void printResult(int rows) {
         if (rows < 2)
             System.out.println(rows+" row affected");
         else
             System.out.println(rows+" rows affected");
     }
 
-    public void print(ResultSet rs) throws SQLException {
+    public static void printResult(ResultSet rs) throws SQLException {
         ResultSetMetaData metaData= rs.getMetaData();
         int columnCount= metaData.getColumnCount();
 
+        String row="";
         for (int i = 1; i < (columnCount+1); i++) {
-            System.out.print(metaData.getColumnName(i).toUpperCase()+"\t\t");
+//            System.out.print(metaData.getColumnName(i).toUpperCase()+", ");
+            row= row.concat(metaData.getColumnName(i).toUpperCase()+", ");
         }
-        System.out.println();
+        System.out.println(Query.removeLastComma(row));
+
         while (rs.next()) {
+            row="";
             for (int i = 1; i < (columnCount+1); i++) {
-                System.out.print(rs.getString(i)+"\t\t");
+                row= row.concat(rs.getString(i)+", ");
             }
-            System.out.println();
+            System.out.println(Query.removeLastComma(row));
         }
 
     }

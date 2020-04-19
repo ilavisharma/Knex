@@ -101,6 +101,17 @@ public class Query {
         return this;
     }
 
+    public Query having(String condition) {
+        String havingClause= " HAVING "+condition;
+        sql= sql.concat(havingClause);
+        return this;
+    }
+
+    public Query drop() {
+        sql= sql.concat("DROP TABLE "+tableName);
+        return this;
+    }
+
 //    SOME HELPERS
     public String getRawSql() {
         return sql;
@@ -119,7 +130,7 @@ public class Query {
         return insertClause;
     }
 
-    private String removeLastComma(String string) {
+    static String removeLastComma(String string) {
         return string.substring(0, string.length()-2);
     }
 }

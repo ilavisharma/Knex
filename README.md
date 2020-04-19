@@ -12,6 +12,7 @@ TODO: Add setup instructions here
 - [x] UPDATE
 - [x] DELETE
 - [x] GROUP BY
+- [x] HAVING
 - [x] ORDER BY
 
 Some advanced statements (will be doing soon)
@@ -22,4 +23,4 @@ Some advanced statements (will be doing soon)
     
 **Some DDL**
 - [ ] CREATE TABLE
-- [ ] DROP TABLE
+- [x] DROP TABLE
