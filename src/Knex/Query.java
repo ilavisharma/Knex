@@ -107,6 +107,11 @@ public class Query {
         return this;
     }
 
+    public Query limit(int limit) {
+        sql= sql.concat(" LIMIT "+limit);
+        return this;
+    }
+
     public Query drop() {
         sql= sql.concat("DROP TABLE "+tableName);
         return this;

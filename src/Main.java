@@ -13,9 +13,12 @@ public class Main {
             Knex db= new Knex("mysql", client);
 
             Query q1= new Query("users")
-                    .select("*");
+                    .select("*")
+                    .limit(2);
 
-            db.print(db.executeQuery(q1));
+            ResultSet rs= db.executeQuery(q1);
+
+            Knex.printResult(rs);
 
             db.close();
 
